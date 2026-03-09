@@ -1,13 +1,12 @@
 import requests
-import os
 
-# O Python vai buscar o CONTEÚDO que está guardado no GitHub
-NASA_KEY = os.getenv('NASA_KEY')
-TG_TOKEN = os.getenv('TG_TOKEN')
-CHAT_ID = os.getenv('CHAT_ID')
+# COLOQUE SEUS CÓDIGOS DIRETAMENTE ENTRE AS ASPAS
+NASA_KEY = "TPietevSID71LaSZcqKEBwBbQWoyJ2hOvFkjr4sk"
+TG_TOKEN = "8294119351:AAFxdGkUOb3FRvVOxH31uCizVan8jCIlSD0"
+CHAT_ID = "8684474222"
 
 def pegar_dados_nasa():
-    # Agora o NASA_KEY vai valer o seu código secreto
+    # Agora a chave vai direto na URL
     url = f"https://api.nasa.gov/planetary/apod?api_key={NASA_KEY}"
     response = requests.get(url)
     if response.status_code == 200:
@@ -15,16 +14,11 @@ def pegar_dados_nasa():
     else:
         print(f"Erro na NASA: {response.status_code}")
         return None
-# ... resto do código igual ...
 
 def enviar_telegram(titulo, texto, imagem):
-    # Corta o texto se for muito longo (limite do Telegram)
     resumo = (texto[:500] + '...') if len(texto) > 500 else texto
-    
-    # Monta a mensagem bonita
     mensagem = f"🔭 *{titulo}*\n\n{resumo}\n\n📸 {imagem}"
     
-    # Envia para o seu Bot
     url_tg = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
     payload = {
         "chat_id": CHAT_ID, 
@@ -41,7 +35,6 @@ def enviar_telegram(titulo, texto, imagem):
 if __name__ == "__main__":
     dados = pegar_dados_nasa()
     if dados:
-        # Puxa os campos certos do dicionário da NASA
         enviar_telegram(
             dados.get('title', 'Sem título'), 
             dados.get('explanation', 'Sem descrição'), 
@@ -49,5 +42,3 @@ if __name__ == "__main__":
         )
     else:
         print("Não foi possível carregar os dados da NASA.")
-
-
