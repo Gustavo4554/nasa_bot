@@ -1,9 +1,7 @@
 name: NASA Daily News
 
 on:
-  schedule:
-    - cron: '0 12 * * *' # Roda todo dia às 09:00 (Brasília)
-  workflow_dispatch: # Permite rodar manualmente
+  workflow_dispatch: 
 
 jobs:
   run-bot:
@@ -21,8 +19,4 @@ jobs:
         run: pip install requests
 
       - name: Run NASA Bot
-        env:
-          NASA_KEY: ${{ secrets.NASA_KEY }}
-          TG_TOKEN: ${{ secrets.TG_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python nasabot.py
