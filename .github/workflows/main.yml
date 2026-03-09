@@ -2,6 +2,8 @@ name: NASA Daily News
 
 on:
   workflow_dispatch: 
+  schedule:
+    - cron: '0 12 * * *' # Todo dia às 09:00 (Horário de Brasília)
 
 jobs:
   run-bot:
@@ -16,7 +18,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests deep-translator
 
       - name: Run NASA Bot
         run: python nasabot.py
