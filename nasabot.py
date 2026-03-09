@@ -9,7 +9,7 @@ CHAT_ID = os.getenv('8684474222')
 
 def pegar_dados_nasa():
     # Aqui usamos a variável NASA_KEY que definimos acima
-    url = f"https://api.nasa.gov/planetary/apod?api_key={TPietevSID71LaSZcqKEBwBbQWoyJ2hOvFkjr4sk}"
+    url = f"https://api.nasa.gov/planetary/apod?api_key={NASA_KEY}"
     try:
         response = requests.get(url)
         if response.status_code == 200:
@@ -49,3 +49,4 @@ if __name__ == "__main__":
         )
     else:
         print("Não foi possível obter dados da NASA hoje.")
+
