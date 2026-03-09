@@ -16,4 +16,4 @@ jobs:
       - name: Instalar Bibliotecas
         run: pip install requests
       - name: Rodar Script
-        run: python nasa_bot.py
+        run: python nasabot.py
