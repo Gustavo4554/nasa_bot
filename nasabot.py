@@ -2,9 +2,9 @@ import requests
 import os
 
 # Puxa os dados das configurações (Secrets) do GitHub
-NASA_KEY = os.getenv('TPietevSID71LaSZcqKEBwBbQWoyJ2hOvFkjr4sk')
-TG_TOKEN = os.getenv('8294119351:AAFxdGkUOb3FRvVOxH31uCizVan8jCIlSD0')
-CHAT_ID = os.getenv('8684474222')
+NASA_KEY = os.getenv('NASA_KEY')
+TG_TOKEN = os.getenv('TG_TOKEN')
+CHAT_ID = os.getenv('CHAT_ID')
 
 def pegar_dados_nasa():
     # Usa a chave que o GitHub entregou
@@ -48,3 +48,4 @@ if __name__ == "__main__":
         )
     else:
         print("Não foi possível carregar os dados da NASA.")
+
