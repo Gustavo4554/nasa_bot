@@ -1,19 +1,28 @@
-name: Rodar Bot da NASA
+name: NASA Daily News
+
 on:
   schedule:
-    - cron: '0 12 * * *' # Roda todo dia às 12:00 UTC (09:00 Brasília)
-  workflow_dispatch: # Permite rodar manualmente para testar
+    - cron: '0 12 * * *' # Roda todo dia às 09:00 (Brasília)
+  workflow_dispatch: # Permite rodar manualmente
 
 jobs:
-  build:
+  run-bot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Instalar Python
-        uses: actions/setup-python@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: os-actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Instalar Bibliotecas
+
+      - name: Install dependencies
         run: pip install requests
-      - name: Rodar Script
+
+      - name: Run NASA Bot
+        env:
+          NASA_KEY: ${{ secrets.NASA_KEY }}
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python nasabot.py
