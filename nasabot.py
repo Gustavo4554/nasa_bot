@@ -1,13 +1,13 @@
 import requests
 import os
 
-# Puxa os dados das configurações (Secrets) do GitHub
+# O Python vai buscar o CONTEÚDO que está guardado no GitHub
 NASA_KEY = os.getenv('NASA_KEY')
 TG_TOKEN = os.getenv('TG_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
 
 def pegar_dados_nasa():
-    # Usa a chave que o GitHub entregou
+    # Agora o NASA_KEY vai valer o seu código secreto
     url = f"https://api.nasa.gov/planetary/apod?api_key={NASA_KEY}"
     response = requests.get(url)
     if response.status_code == 200:
@@ -15,6 +15,7 @@ def pegar_dados_nasa():
     else:
         print(f"Erro na NASA: {response.status_code}")
         return None
+# ... resto do código igual ...
 
 def enviar_telegram(titulo, texto, imagem):
     # Corta o texto se for muito longo (limite do Telegram)
@@ -48,4 +49,5 @@ if __name__ == "__main__":
         )
     else:
         print("Não foi possível carregar os dados da NASA.")
+
 
