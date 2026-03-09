@@ -1,29 +1,50 @@
 import requests
 import os
 
-def enviar_nasa():
-    # Puxa os segredos
-    key = os.getenv('TPietevSID71LaSZcqKEBwBbQWoyJ2hOvFkjr4sk')
-    token = os.getenv('8294119351:AAFxdGkUOb3FRvVOxH31uCizVan8jCIlSD0')
-    chat = os.getenv('8684474222')
+# Puxa os dados das configurações (Secrets) do GitHub
+NASA_KEY = os.getenv('TPietevSID71LaSZcqKEBwBbQWoyJ2hOvFkjr4sk')
+TG_TOKEN = os.getenv('8294119351:AAFxdGkUOb3FRvVOxH31uCizVan8jCIlSD0')
+CHAT_ID = os.getenv('8684474222')
 
-    print(f"Tentando com o Chat ID: {chat}") # Isso vai aparecer no log do GitHub
+def pegar_dados_nasa():
+    # Usa a chave que o GitHub entregou
+    url = f"https://api.nasa.gov/planetary/apod?api_key={NASA_KEY}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Erro na NASA: {response.status_code}")
+        return None
 
-    # Busca na NASA
-    url = f"https://api.nasa.gov/planetary/apod?api_key={key}"
-    res = requests.get(url).json()
-    titulo = res.get('title', 'Notícia Espacial')
-    link_img = res.get('url', '')
+def enviar_telegram(titulo, texto, imagem):
+    # Corta o texto se for muito longo (limite do Telegram)
+    resumo = (texto[:500] + '...') if len(texto) > 500 else texto
     
-    # Envia pro Telegram
-    url_tg = f"https://api.telegram.org/bot{token}/sendMessage"
-    payload = {"chat_id": chat, "text": f"🚀 {titulo}\n\n{link_img}"}
+    # Monta a mensagem bonita
+    mensagem = f"🔭 *{titulo}*\n\n{resumo}\n\n📸 {imagem}"
     
-    # PEGA A RESPOSTA DO TELEGRAM
-    resposta = requests.post(url_tg, data=payload)
+    # Envia para o seu Bot
+    url_tg = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": CHAT_ID, 
+        "text": mensagem, 
+        "parse_mode": "Markdown"
+    }
     
-    print(f"Status do Telegram: {resposta.status_code}")
-    print(f"Mensagem do Telegram: {resposta.text}")
+    envio = requests.post(url_tg, data=payload)
+    if envio.status_code == 200:
+        print("✅ Mensagem enviada com sucesso!")
+    else:
+        print(f"❌ Erro no Telegram: {envio.text}")
 
 if __name__ == "__main__":
-    enviar_nasa()
+    dados = pegar_dados_nasa()
+    if dados:
+        # Puxa os campos certos do dicionário da NASA
+        enviar_telegram(
+            dados.get('title', 'Sem título'), 
+            dados.get('explanation', 'Sem descrição'), 
+            dados.get('url', '')
+        )
+    else:
+        print("Não foi possível carregar os dados da NASA.")
